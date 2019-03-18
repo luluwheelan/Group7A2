@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Group7A2.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +14,7 @@ namespace Group7A2
     {
         protected void Application_Start()
         {
+            Database.SetInitializer(new Group7A2ContextInitializer());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

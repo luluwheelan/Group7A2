@@ -58,11 +58,11 @@ namespace Group7A2
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "839606369329-14al6i23jlbo2suup9nttvdj60773pai.apps.googleusercontent.com",
+                ClientSecret = "GzvDaKpYY9mREePkLLM3-6Of"
+            });
         }
     }
 }
