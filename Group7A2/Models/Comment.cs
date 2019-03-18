@@ -18,7 +18,11 @@ namespace Group7A2.Models
         [StringLength(500, MinimumLength = 10)]
         public virtual string Content { get; set; }
 
-        public virtual ApplicationUser Author { get; set; }
+        public virtual int PostId { get; set; }
+
+        public virtual Post post { get; set; }
+
+        public virtual string Author { get; set; }
 
         //Set PostTime dafault value.
         public DateTime PostTime

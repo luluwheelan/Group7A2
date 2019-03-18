@@ -17,7 +17,8 @@ namespace Group7A2.Controllers
         // GET: Posts
         public ActionResult Index()
         {
-            return View(db.Posts.ToList());
+            var posts = db.Posts.Include(p => p.Category);
+            return View(posts.ToList());
         }
 
         // GET: Posts/Details/5
@@ -38,6 +39,7 @@ namespace Group7A2.Controllers
         // GET: Posts/Create
         public ActionResult Create()
         {
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name");
             return View();
         }
 
@@ -46,7 +48,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PostId,Subject,Content,CategoryId,Category,Author,PostTime")] Post post)
+        public ActionResult Create([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +57,7 @@ namespace Group7A2.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
             return View(post);
         }
 
@@ -70,6 +73,7 @@ namespace Group7A2.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
             return View(post);
         }
 
@@ -78,7 +82,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PostId,Subject,Content,CategoryId,Category,Author,PostTime")] Post post)
+        public ActionResult Edit([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +90,7 @@ namespace Group7A2.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
             return View(post);
         }
 

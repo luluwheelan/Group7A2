@@ -23,7 +23,7 @@ namespace Group7A2.Models
 
         public virtual Category Category { get; set; }
 
-        public virtual ApplicationUser Author { get; set; }
+        public virtual String Author { get; set; }
 
         //Set PostTime dafault value.
         public DateTime PostTime

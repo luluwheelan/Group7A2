@@ -46,7 +46,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Content,Author,PostTime")] Comment comment)
+        public ActionResult Create([Bind(Include = "CommentId,Content,Author,PostTime")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Content,Author,PostTime")] Comment comment)
+        public ActionResult Edit([Bind(Include = "CommentId,Content,Author,PostTime")] Comment comment)
         {
             if (ModelState.IsValid)
             {
