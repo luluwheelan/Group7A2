@@ -20,7 +20,7 @@ namespace Group7A2.Models
 
         public virtual int PostId { get; set; }
 
-        public virtual Post post { get; set; }
+        public virtual Post Post { get; set; }
 
         public virtual string Author { get; set; }
 

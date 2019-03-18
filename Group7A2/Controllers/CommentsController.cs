@@ -17,7 +17,8 @@ namespace Group7A2.Controllers
         // GET: Comments
         public ActionResult Index()
         {
-            return View(db.Comments.ToList());
+            var comments = db.Comments.Include(c => c.Post);
+            return View(comments.ToList());
         }
 
         // GET: Comments/Details/5
@@ -38,6 +39,7 @@ namespace Group7A2.Controllers
         // GET: Comments/Create
         public ActionResult Create()
         {
+            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject");
             return View();
         }
 
@@ -46,7 +48,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CommentId,Content,Author,PostTime")] Comment comment)
+        public ActionResult Create([Bind(Include = "CommentId,Content,PostId,Author,PostTime")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -55,6 +57,7 @@ namespace Group7A2.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
             return View(comment);
         }
 
@@ -70,6 +73,7 @@ namespace Group7A2.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
             return View(comment);
         }
 
@@ -78,7 +82,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CommentId,Content,Author,PostTime")] Comment comment)
+        public ActionResult Edit([Bind(Include = "CommentId,Content,PostId,Author,PostTime")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +90,7 @@ namespace Group7A2.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
             return View(comment);
         }
 
