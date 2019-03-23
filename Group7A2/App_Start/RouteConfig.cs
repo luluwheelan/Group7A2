@@ -13,11 +13,16 @@ namespace Group7A2
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //Add  attribute route
+            routes.MapMvcAttributeRoutes();
+
+            //Attribute route combine conventional route 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            
         }
     }
 }
