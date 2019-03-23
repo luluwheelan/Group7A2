@@ -54,9 +54,9 @@ namespace Group7A2
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "264284491174672",
+               appSecret: "23529fddb6b210c4db85a0d4a931940e");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
