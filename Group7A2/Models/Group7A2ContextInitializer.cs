@@ -23,8 +23,39 @@ namespace Group7A2.Models
             context.Categories.Add(club);
             context.Categories.Add(news);
 
+            Post p1 = new Post
+            {
+                Subject = "Sell Java book",
+                Content = "The “for dummies” books are rarely worth the money if you already have some experience writing code. But for absolute beginners these books are often perfect because they’re written clearly in plain English without too many confusing terms.",
+                Category = books,
+
+            };
+
+            Post p2 = new Post
+            {
+                Subject = "Orillia to Barrie",
+                Content = "Every monday to friday.",
+                Category = carPool,
+
+            };
 
 
+            context.Posts.Add(p1);
+            context.Posts.Add(p2);
+
+            Comment c1 = new Comment
+            {
+                Content = "I want your book",
+                Post = p1,
+            };
+
+            Comment c2 = new Comment
+            {
+                Content = "How much for your book",
+                Post = p1,
+            };
+            context.Comments.Add(c1);
+            context.Comments.Add(c2);
             base.Seed(context);
         }
     }
