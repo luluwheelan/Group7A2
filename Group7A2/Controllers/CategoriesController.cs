@@ -10,17 +10,24 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
+
     public class CategoriesController : Controller
     {
         private Group7A2Context db = new Group7A2Context();
 
+
         // GET: Categories
+        [Route("")]
+        [Route("index")]
+        [Route("home")]
+        [Route("category")]
         public ActionResult Index()
         {
             return View(db.Categories.ToList());
         }
 
         // GET: Categories/Details/5
+        [Route("category/{id}")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,6 +43,8 @@ namespace Group7A2.Controllers
         }
 
         // GET: Categories/Create
+        [Authorize(Roles = "Admin")]
+        [Route("create/category")]
         public ActionResult Create()
         {
             return View();
@@ -46,6 +55,8 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [Route("create/category")]
         public ActionResult Create([Bind(Include = "CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
@@ -59,6 +70,8 @@ namespace Group7A2.Controllers
         }
 
         // GET: Categories/Edit/5
+        [Authorize(Roles = "Admin")]
+        [Route("edit/category/{id}")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -78,6 +91,8 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        [Route("edit/category/{id}")]
         public ActionResult Edit([Bind(Include = "CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
@@ -90,6 +105,8 @@ namespace Group7A2.Controllers
         }
 
         // GET: Categories/Delete/5
+        [Authorize(Roles = "Admin")]
+        [Route("delete/category/{id}")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -105,8 +122,10 @@ namespace Group7A2.Controllers
         }
 
         // POST: Categories/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("delete/category/{id}")]
         public ActionResult DeleteConfirmed(int id)
         {
             Category category = db.Categories.Find(id);

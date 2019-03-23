@@ -10,8 +10,10 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
+
     public class PostsController : Controller
     {
+
         private Group7A2Context db = new Group7A2Context();
 
         // GET: Posts
@@ -37,6 +39,7 @@ namespace Group7A2.Controllers
         }
 
         // GET: Posts/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name");
@@ -48,6 +51,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
         {
             if (ModelState.IsValid)
@@ -62,6 +66,7 @@ namespace Group7A2.Controllers
         }
 
         // GET: Posts/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +87,7 @@ namespace Group7A2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace Group7A2.Controllers
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,6 +117,7 @@ namespace Group7A2.Controllers
         }
 
         // POST: Posts/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
