@@ -6,12 +6,16 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Group7A2;
 using Group7A2.Controllers;
+using Group7A2.Models;
 
 namespace Group7A2.Tests.Controllers
 {
+    
+
     [TestClass]
     public class HomeControllerTest
     {
+
         [TestMethod]
         public void Index()
         {
@@ -39,6 +43,19 @@ namespace Group7A2.Tests.Controllers
         }
 
         [TestMethod]
+        public void AboutReturnView()
+        {
+            //Arrange
+            HomeController controller = new HomeController();
+
+            //Act
+            ViewResult result = controller.About() as ViewResult;
+
+            //Assert
+            Assert.AreEqual("About", result.ViewName);
+        }
+
+        [TestMethod]
         public void Contact()
         {
             // Arrange
@@ -50,5 +67,7 @@ namespace Group7A2.Tests.Controllers
             // Assert
             Assert.IsNotNull(result);
         }
+
+
     }
 }
