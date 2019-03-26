@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
+using System.Web.Security;
 
 [assembly: OwinStartupAttribute(typeof(Group7A2.Startup))]
 namespace Group7A2
@@ -29,16 +30,25 @@ namespace Group7A2
                 // first we create Admin role  
                 var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
                 role.Name = "Admin";
+                roleManager.Create(role);
 
+                //Here we create a Admin user who will maintain the website content.            	 
+                //
+                //if (user != null)
+                //{
+                //    
+                //    |
+                //}
 
-                //Here we create a Admin super user who will maintain the website content.            	 
-                ApplicationUser user = UserManager.FindByEmail("luluwheelan@gmail.com");
-                if (user != null)
-                {
-                    roleManager.Create(role);
-                    var result1 = UserManager.AddToRole(user.Id, "Admin");
-                }
             }
+            AddAdmin(UserManager,"group7a2@gmail.com");
+        }
+
+        private static void AddAdmin(UserManager<ApplicationUser> UserManager,string Email)
+        {
+            ApplicationUser user = UserManager.FindByEmail(Email);
+            var result1 = UserManager.AddToRole(user.Id, "Admin");
+         
         }
 
 
