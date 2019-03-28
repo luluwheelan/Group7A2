@@ -38,6 +38,28 @@ namespace Group7A2.Controllers
             return View(post);
         }
 
+        // GET: Posts/Details/5
+        //This function use PostViewModel and returns a list of post with the same categoryId
+        //public ActionResult PostByCategory(int? categoryId)
+        //{
+        //    PostViewModel model = new PostViewModel
+        //    {
+        //        Posts = (from p in db.Posts where p.CategoryId == categoryId select new Post() {
+        //            PostId = p.PostId,
+        //            PostTime = p.PostTime,
+        //            Subject = p.Subject,
+        //            Content = p.Content,
+        //            Author = p.Author,
+
+        //        }).ToList(),
+
+        //        Category = db.Categories.Find(categoryId)
+        //    };
+
+        //    return View(model);
+        //}
+
+
         // GET: Posts/Create
         [Authorize]
         public ActionResult Create()
@@ -52,10 +74,11 @@ namespace Group7A2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
+        public ActionResult Create([Bind(Include = "PostId,Subject,Content,CategoryId")] Post post)
         {
             if (ModelState.IsValid)
             {
+                post.Author = User.Identity.Name;
                 db.Posts.Add(post);
                 db.SaveChanges();
                 return RedirectToAction("Index");

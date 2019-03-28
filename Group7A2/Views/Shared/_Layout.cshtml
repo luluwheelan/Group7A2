@@ -5,30 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Georgian College Student Forum</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/style/AddStyle.css")
     @Scripts.Render("~/bundles/modernizr")
+    
+
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
+            <a class="navbar-brand" href="@Url.Action("","", "")">
+                <img src="~/Content/images/georgian-college-experience-logo.svg" width="120" height="80" alt="" />
+            </a>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Georgian College Student Forum", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("What's New", "", "Home")</li>
-                    <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+                <ul class="nav navbar-nav pt-5">
+                    <li class="nav-item">@Html.ActionLink("What's New", "", "Home")</li>
+                    <li class="nav-item">@Html.ActionLink("Contact Us", "Contact", "Home")</li>
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+
+    <div class="container-fluid body-content">
         @RenderBody()
         <hr />
         <footer>
@@ -39,5 +48,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    @*<script src="~/Scripts/app/musicscripts.js"></script>*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 </body>
 </html>

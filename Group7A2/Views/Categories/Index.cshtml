@@ -4,55 +4,45 @@
     ViewBag.Title = "Index";
 }
 
-<div class="jumbotron">
-    <h1>Georgian College Student Forum</h1>
-    <p class="lead">ASP .NET group 7 assignment 2 project.</p>
-    <p>This is a simple forum project build on ASP .NET MVC platform.</p>
+<div class="" id="home-landing">
+    <div class="heading col-md-4 ">
+        <div class="bg-primary">
+            <h1 class=" text-white">Georgian College Student Forum</h1>
+        </div>
+        
+    </div>
+    
 </div>
 
-<h2>Index</h2>
+
 
 @if (User.IsInRole("Admin"))
 {
     <p>
-        @Html.ActionLink("Create New", "Create")
+        @Html.ActionLink("Create A New Category", "Create")
     </p>
 }
 
-<section>
-
-</section>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
-
+<div class="container mt-5" id="newList">
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @if (User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId })
-                }
+        <div class="col-md-12  jumbotron-fluid mt-5 bg-light pl-3">
+            <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId })
+            }
+            @if (User.IsInRole("Admin"))
+            {
                 @Html.ActionLink("Details", "Details", new { id = item.CategoryId })
-                @if (User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })}
-            </td>
-        </tr>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })}
+            <p> @Html.DisplayFor(modelItem => item.Description)</p>
+            <button class="btn btn-secondary">@Html.ActionLink("Get More", "Index", "Posts", new { id = item.CategoryId }) >></button>
+        </div>
     }
 
-</table>
+</div>
+

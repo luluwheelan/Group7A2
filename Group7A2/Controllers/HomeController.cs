@@ -17,7 +17,7 @@ namespace Group7A2.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
-            return View();
+            return View("About");
         }
 
         public ActionResult Contact()

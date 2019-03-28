@@ -13,17 +13,30 @@ namespace Group7A2.Controllers
 
     public class CategoriesController : Controller
     {
-        private Group7A2Context db = new Group7A2Context();
+        //private Group7A2Context db = new Group7A2Context();
+        //Create two constructors
+        //dafault constructors with no params, and will get Entity Framework
+        ICategoryRepository db;
 
+        public CategoriesController()
+        {
+            this.db = new EFDataCategories();
+        }
+        //If the contrustor pass in parameter, will use mock date, mean it is for testing.
+        public CategoriesController(ICategoryRepository mockDb)
+        {
+            this.db = mockDb;
+        }
 
         // GET: Categories
         [Route("")]
         [Route("index")]
         [Route("home")]
         [Route("category")]
+        [Route("categories/Index")]
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            return View("Index", db.Categories.ToList());
         }
 
         // GET: Categories/Details/5
@@ -34,7 +47,8 @@ namespace Group7A2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
+            //Category category = db.Categories.Find(id);
+            Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -44,7 +58,6 @@ namespace Group7A2.Controllers
 
         // GET: Categories/Create
         [Authorize(Roles = "Admin")]
-        [Route("create/category")]
         public ActionResult Create()
         {
             return View();
@@ -56,13 +69,13 @@ namespace Group7A2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        [Route("create/category")]
         public ActionResult Create([Bind(Include = "CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
+                //db.Categories.Add(category);
+                //db.SaveChanges();
+                db.Save(category);
                 return RedirectToAction("Index");
             }
 
@@ -71,14 +84,14 @@ namespace Group7A2.Controllers
 
         // GET: Categories/Edit/5
         [Authorize(Roles = "Admin")]
-        [Route("edit/category/{id}")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
+            //Category category = db.Categories.Find(id);
+            Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -92,13 +105,13 @@ namespace Group7A2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        [Route("edit/category/{id}")]
         public ActionResult Edit([Bind(Include = "CategoryId,Name,Description")] Category category)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(category).State = EntityState.Modified;
+                //db.SaveChanges();
+                db.Save(category);
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -106,14 +119,14 @@ namespace Group7A2.Controllers
 
         // GET: Categories/Delete/5
         [Authorize(Roles = "Admin")]
-        [Route("delete/category/{id}")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
+            //Category category = db.Categories.Find(id);
+            Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
                 return HttpNotFound();
@@ -125,12 +138,13 @@ namespace Group7A2.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Route("delete/category/{id}")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
+            //Category category = db.Categories.Find(id);
+            Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
+            //db.Categories.Remove(category);
+            //db.SaveChanges();
+            db.Delete(category);
             return RedirectToAction("Index");
         }
 

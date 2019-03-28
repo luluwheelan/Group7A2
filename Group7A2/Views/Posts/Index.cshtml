@@ -1,12 +1,35 @@
-﻿@model IEnumerable<Group7A2.Models.Post>
+﻿@model IEnumerable<Group7A2.Models.PostViewModel>
 
 @{
     ViewBag.Title = "Index";
 }
+<h2>@Html.DisplayFor(model => model.Ca)</h2>
+<div class="container" >
+    @foreach (var item in Model)
+    {
+        <div class="col-md-12  jumbotron-fluid ">
+            <h3>@Html.DisplayFor(modelItem => item.Name)</h3>
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.CategoryId })
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Details", "Details", new { id = item.CategoryId })
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })}
+            <p> @Html.DisplayFor(modelItem => item.Description)</p>
+            <button class="btn btn-secondary">@Html.ActionLink("Get More", "Index", "Posts", new { id = item.CategoryId }) >></button>
+        </div>
+    }
 
-<h2>Index</h2>
+</div>
 
-<p>
+@*<h2>Index</h2>*@
+
+@*<p>
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
@@ -54,4 +77,4 @@
     </tr>
 }
 
-</table>
+</table>*@

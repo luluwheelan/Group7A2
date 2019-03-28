@@ -1,0 +1,52 @@
+﻿#home-landing {
+    height: 500px;
+    background: url('../images/barrie-res.jpg')no-repeat center;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.navbar {
+    padding: 1.2rem 4rem;
+    font-size: 1.8rem;
+    font-weight: 800;
+    height:70px;
+
+}
+
+.navbar-brand img {
+    height: 5rem;
+    margin-top: -2rem;
+}
+
+.nav .nav-link {
+    color: black;
+    padding-top: 1rem;
+}
+
+
+.heading {
+    padding-top: 13rem;
+}
+
+body {
+    padding-top: 7rem;
+}
+
+
+/*============= MEDIA QUERIES =============*/
+
+/* Medium (md) devices (tablets, 800px and under) */
+@media (max-width: 800px) {
+    .navbar {
+        padding: .6rem 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .navbar-brand img {
+        height: 4rem;
+        margin-top: 0rem;
+    }
+
+}
