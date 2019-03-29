@@ -23,9 +23,39 @@ namespace Group7A2.Tests.Controllers
         {
             categories = new List<Category>
             {
-                new Category{CategoryId = 300, Name = "Ctest1", Description = "Moq date category one"},
+                new Category{CategoryId = 300, Name = "Ctest1", Description = "Moq date category one", Posts = new List<Post>{
+                    new Post
+            {
+                Subject = "Test Post1",
+                Content = "Test Post1 content",
+                CategoryId = 300,
+
+            },
+                    new Post
+            {
+                Subject = "Test Post2",
+                Content = "Test Post2 content",
+                CategoryId = 300,
+
+            }
+
+        } },
                 new Category{CategoryId = 301, Name = "Ctest2", Description = "Moq date category two"},
                 new Category{CategoryId = 302, Name = "Ctest3", Description = "Moq date category three"}
+            };
+            Post p1 = new Post
+            {
+                Subject = "Test Post1",
+                Content = "Test Post1 content",
+                CategoryId = 300,
+
+            };
+            Post p2 = new Post
+            {
+                Subject = "Test Post2",
+                Content = "Test Post2 content",
+                CategoryId = 300,
+
             };
             //Set up mock object
             mock = new Mock<ICategoryRepository>();
@@ -39,7 +69,7 @@ namespace Group7A2.Tests.Controllers
         {
 
             //Arrange
-            //Instance is decleared in TestInitialize()
+            //Instance decleared in TestInitialize()
 
             //Act
             ViewResult result = controller.Index() as ViewResult; 
@@ -62,6 +92,7 @@ namespace Group7A2.Tests.Controllers
             Assert.AreEqual("Index", viewName);
         }
 
+
         [TestMethod]
         public void IndexLoadsCategories()
         {
@@ -74,63 +105,75 @@ namespace Group7A2.Tests.Controllers
             // assert
             CollectionAssert.AreEqual(categories.OrderBy(c => c.Name).ToList(), results);
         }
+        
+        [TestMethod]
+        public void CreateLoadsView()
+        {
+            // act
+            ViewResult actual = (ViewResult)controller.Create();
+
+            // assert
+            Assert.AreEqual("Create", actual.ViewName);
+        }
+
+        // POST: Create
+        [TestMethod]
+        public void CreateSaveValidData()
+        {
+            // act 
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Create(categories[0]);
+
+            // assert
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
+        }
+
+        
+        [TestMethod]
+        public void CreateSaveInvalidLoadsEditView()
+        {
+            // arrange
+            controller.ModelState.AddModelError("key", "error data");
+
+            // act
+            ViewResult actual = (ViewResult)controller.Create(categories[0]);
+
+            // assert
+            Assert.AreEqual("Create", actual.ViewName);
+        }
 
         [TestMethod]
-        public void DetailReturnsViewWithValidId()
+        public void PostListReturnsWithValidId()
         {
             //Act
-
+            var result = (Category)((ViewResult)controller.PostList(300)).Model;
             //Assert
-
+            Assert.AreEqual("Ctest1", result.Name);
         }
 
         [TestMethod]
-        public void DetailReturnsErrorWithoutId()
+        public void PostListReturnsErrorWithInvalidId()
         {
-            // act
-
-
-            // assert
-
+            //Act
+            ViewResult result = controller.PostList(500) as ViewResult;
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
         }
 
         [TestMethod]
-        public void DeleteWithoutIdReturnsError()
+        public void PostListReturnsViewWithValidId()
         {
-            // act
-
-
-            // assert
-
-        }
-
-        [TestMethod]
-        public void DeleteWithValidIdConfirmed()
-        {
-            //Arrange
-            int id = 2;
-            // act
-            ViewResult actual = controller.DeleteConfirmed(id) as ViewResult;
-
-            // assert
-            Assert.AreEqual("Index", actual.ViewName);
-        }
-
-        [TestMethod]
-        public void DeleteWithInValidId()
-        {
-            //act 
-            ViewResult actual = controller.Delete(4) as ViewResult;
-
-            //assert 
-
+            //Act
+            ViewResult result = controller.PostList(300) as ViewResult;
+            //Assert
+            Assert.AreEqual("PostList", result.ViewName);
         }
 
         [TestMethod]
         public void EditWithValidId()
         {
+            int id = 300;
             // act           
-            ViewResult actual = controller.Edit(1) as ViewResult;
+            ViewResult actual = controller.Edit(id) as ViewResult;
 
             // assert           
             Assert.AreEqual("Edit", actual.ViewName);
@@ -139,11 +182,115 @@ namespace Group7A2.Tests.Controllers
         [TestMethod]
         public void EditWithInvalidId()
         {
+            int id = 3;
             // act           
-            ViewResult actual = controller.Edit(4) as ViewResult;
+            ViewResult actual = controller.Edit(id) as ViewResult;
 
-            // assert   
+            // assert           
+            Assert.AreEqual("Error", actual.ViewName);
 
+        }
+        [TestMethod]
+        public void EditInvalidModelReturnEditView()
+        {
+
+            // arrange
+            controller.ModelState.AddModelError("key", "some error here");
+
+            // act
+            ViewResult actual = (ViewResult)controller.Edit(categories[0]);
+
+            // assert
+            Assert.AreEqual("Edit", actual.ViewName);
+
+        }
+
+        // POST: Edit
+        [TestMethod]
+        public void EditSaveValidReturnIndexView()
+        {
+            // act 
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(categories[0]);
+
+            // assert
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void DetailReturnsErrorWithInvalidId()
+        {
+            //Act
+            ViewResult result = controller.Details(500) as ViewResult;
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DetailReturnsValidViewWithValidId()
+        {
+            //Act
+            var result = (Category)((ViewResult)controller.Details(300)).Model;
+            //Assert
+            Assert.AreEqual(categories.ToList()[0], result);
+
+        }
+
+
+        [TestMethod]
+        public void DeleteWithValidId()
+        {
+            //Arrange
+            int id = 300;
+            // act
+            ViewResult actual = controller.Delete(id) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Delete", actual.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DeleteWithInValidId()
+        {
+            //Arrange
+            int id = 2;
+            // act
+            ViewResult result = controller.Delete(id) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedNoIdReturnError()
+        {
+            // act
+            ViewResult actual = controller.DeleteConfirmed(null) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedInvalidIdReturnError()
+        {
+            // act
+            ViewResult actual = controller.DeleteConfirmed(1) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedValidId()
+        {
+            // act
+            //ViewResult actual = controller.DeleteConfirmed(300) as ViewResult;
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.DeleteConfirmed(300);
+
+            // assert
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
         }
     }
 }
