@@ -39,28 +39,48 @@ namespace Group7A2.Controllers
             return View("Index", db.Categories.ToList());
         }
 
-        // GET: Categories/Details/5
-        [Route("category/{id}")]
+        //GET: Categories/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
             return View(category);
+        }
+
+        // GET: Categories/Details/5
+        //[Route("category/{id}")]
+        public ActionResult PostList(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+            //Category category = db.Categories.Find(id);
+            Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
+            if (category == null)
+            {
+                //return HttpNotFound("Error");
+                return View("Error");
+            }
+            return View("PostList",category);
         }
 
         // GET: Categories/Create
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         // POST: Categories/Create
@@ -79,7 +99,7 @@ namespace Group7A2.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            return View("Create", category);
         }
 
         // GET: Categories/Edit/5
@@ -88,15 +108,17 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
-            return View(category);
+            return View("Edit", category);
         }
 
         // POST: Categories/Edit/5
@@ -114,7 +136,7 @@ namespace Group7A2.Controllers
                 db.Save(category);
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View("Edit", category);
         }
 
         // GET: Categories/Delete/5
@@ -123,25 +145,35 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
             if (category == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
-            return View(category);
+            return View("Delete", category);
         }
 
         // POST: Categories/Delete/5
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int? id)
         {
+            if (id == null)
+            {
+                return View("Error");
+            }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
+            if (category == null)
+            {
+                return View("Error");
+            }
             //db.Categories.Remove(category);
             //db.SaveChanges();
             db.Delete(category);
