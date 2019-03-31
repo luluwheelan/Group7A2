@@ -10,7 +10,7 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
-    [RequireHttps]
+    [RequireHttps] 
     public class CategoriesController : Controller
     {
         //private Group7A2Context db = new Group7A2Context();
@@ -74,12 +74,13 @@ namespace Group7A2.Controllers
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
-            category.Posts = category.Posts.OrderByDescending(p => p.PostTime).ToList();
+            
             if (category == null)
             {
                 //return HttpNotFound("Error");
                 return View("Error");
             }
+            category.Posts = category.Posts.OrderByDescending(p => p.PostTime).ToList();
             return View("PostList",category);
         }
 

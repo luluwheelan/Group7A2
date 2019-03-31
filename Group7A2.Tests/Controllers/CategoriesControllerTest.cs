@@ -9,7 +9,7 @@ using Moq;
 
 namespace Group7A2.Tests.Controllers
 {
-    
+
     [TestClass]
     public class CategoriesControllerTest
     {
@@ -23,12 +23,17 @@ namespace Group7A2.Tests.Controllers
         {
             categories = new List<Category>
             {
-                new Category{CategoryId = 300, Name = "Ctest1", Description = "Moq date category one", Posts = new List<Post>{
+                new Category
+                { CategoryId = 300,
+                    Name = "Ctest1",
+                    Description = "Moq date category one",
+                    Posts = new List<Post>{
                     new Post
             {
                 Subject = "Test Post1",
                 Content = "Test Post1 content",
                 CategoryId = 300,
+                PostTime = DateTime.Now.Date.AddHours(13).AddMinutes(30)
 
             },
                     new Post
@@ -36,26 +41,36 @@ namespace Group7A2.Tests.Controllers
                 Subject = "Test Post2",
                 Content = "Test Post2 content",
                 CategoryId = 300,
+                PostTime = DateTime.Now.Date.AddHours(3).AddMinutes(30)
 
             }
 
         } },
-                new Category{CategoryId = 301, Name = "Ctest2", Description = "Moq date category two"},
-                new Category{CategoryId = 302, Name = "Ctest3", Description = "Moq date category three"}
-            };
-            Post p1 = new Post
+                new Category{
+                    CategoryId = 301,
+                    Name = "Ctest2",
+                    Description = "Moq date category two",
+                    Posts = new List<Post>{
+                    new Post
             {
                 Subject = "Test Post1",
                 Content = "Test Post1 content",
                 CategoryId = 300,
+                PostTime = DateTime.Now.Date.AddHours(13).AddMinutes(30)
 
-            };
-            Post p2 = new Post
+            },
+                    new Post
             {
                 Subject = "Test Post2",
                 Content = "Test Post2 content",
                 CategoryId = 300,
+                PostTime = DateTime.Now.Date.AddHours(3).AddMinutes(30)
 
+            }
+
+        } }
+
+                //new Category{CategoryId = 302, Name = "Ctest3", Description = "Moq date category three"}
             };
             //Set up mock object
             mock = new Mock<ICategoryRepository>();
@@ -72,11 +87,12 @@ namespace Group7A2.Tests.Controllers
             //Instance decleared in TestInitialize()
 
             //Act
-            ViewResult result = controller.Index() as ViewResult; 
+            ViewResult result = controller.Index() as ViewResult;
 
             //Assert
             Assert.IsNotNull(result);
         }
+
 
         [TestMethod]
         public void IndexViewNameIsIndex()
@@ -85,11 +101,11 @@ namespace Group7A2.Tests.Controllers
             //Instance is decleared in TestInitialize()
 
             //Act
-            ViewResult result = controller.Index() as ViewResult;
-            string viewName = (result as ViewResult).ViewName;
+            var result = controller.Index() as ViewResult;
+            //string viewName = (result as ViewResult).ViewName;
 
             //Assert
-            Assert.AreEqual("Index", viewName);
+            Assert.AreEqual("Index", result.ViewName);
         }
 
 
@@ -103,9 +119,9 @@ namespace Group7A2.Tests.Controllers
             var results = (List<Category>)((ViewResult)controller.Index()).Model;
 
             // assert
-            CollectionAssert.AreEqual(categories.OrderBy(c => c.Name).ToList(), results);
+            CollectionAssert.AreEqual(categories.ToList(), results);
         }
-        
+
         [TestMethod]
         public void CreateLoadsView()
         {
@@ -127,7 +143,7 @@ namespace Group7A2.Tests.Controllers
             Assert.AreEqual("Index", actual.RouteValues["action"]);
         }
 
-        
+
         [TestMethod]
         public void CreateSaveInvalidLoadsEditView()
         {
@@ -156,7 +172,7 @@ namespace Group7A2.Tests.Controllers
             //Act
             ViewResult result = controller.PostList(500) as ViewResult;
             //Assert
-            Assert.AreEqual("Error", result.ViewName);
+            Assert.IsNull(result.Model);
         }
 
         [TestMethod]

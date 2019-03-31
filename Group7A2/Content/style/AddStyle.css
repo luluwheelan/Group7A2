@@ -33,9 +33,10 @@ body {
     padding-top: 7rem;
 }
 
+.category-index {
 
+}
 /*============= MEDIA QUERIES =============*/
-
 /* Medium (md) devices (tablets, 800px and under) */
 @media (max-width: 800px) {
     .navbar {
