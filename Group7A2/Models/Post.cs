@@ -17,6 +17,7 @@ namespace Group7A2.Models
 
         [Required(ErrorMessage = "Give us more details about your topic.")]
         [StringLength(500, MinimumLength = 10)]
+        [DataType(DataType.MultilineText)]
         public virtual String Content { get; set; }
 
         public virtual int CategoryId { get; set; }

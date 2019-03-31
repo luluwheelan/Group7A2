@@ -214,13 +214,18 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\EFDataCategories.cs" />
+    <Compile Include="Models\EFDataComments.cs" />
+    <Compile Include="Models\EFDataPosts.cs" />
     <Compile Include="Models\Group7A2Context.cs" />
     <Compile Include="Models\Group7A2ContextInitializer.cs" />
     <Compile Include="Models\ICategoryRepository.cs" />
+    <Compile Include="Models\ICommentRepository.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IPostRepository.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Post.cs" />
-    <Compile Include="Models\PostViewModel.cs" />
+    <Compile Include="Models\PostCommentViewModel.cs" />
+    <Compile Include="Models\ViewModelCategoryPosts.cs" />
     <Compile Include="Models\ViewModelPostComments.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -336,6 +341,7 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Categories\PostList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

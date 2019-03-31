@@ -10,7 +10,7 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
-
+    [RequireHttps]
     public class CategoriesController : Controller
     {
         //private Group7A2Context db = new Group7A2Context();
@@ -36,7 +36,13 @@ namespace Group7A2.Controllers
         [Route("categories/Index")]
         public ActionResult Index()
         {
-            return View("Index", db.Categories.ToList());
+            List<Category> categories = db.Categories.ToList();
+            foreach (Category category in categories)
+            {
+                //only show the latest two posts title
+                category.Posts = category.Posts.OrderByDescending(p => p.PostTime).Take(2).ToList();
+            }
+            return View("Index", categories);
         }
 
         //GET: Categories/Details/5
@@ -68,6 +74,7 @@ namespace Group7A2.Controllers
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
+            category.Posts = category.Posts.OrderByDescending(p => p.PostTime).ToList();
             if (category == null)
             {
                 //return HttpNotFound("Error");

@@ -10,54 +10,49 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
-
+    [RequireHttps]
     public class PostsController : Controller
     {
 
-        private Group7A2Context db = new Group7A2Context();
+        IPostRepository db;
+
+        public PostsController()
+        {
+            this.db = new EFDataPosts();
+        }
+        //If the contrustor pass in parameter, will use mock date, mean it is for testing.
+        public PostsController(IPostRepository mockDb)
+        {
+            this.db = mockDb;
+        }
 
         // GET: Posts
-        public ActionResult Index()
-        {
-            var posts = db.Posts.Include(p => p.Category);
-            return View(posts.ToList());
-        }
+        //public ActionResult Index()
+        //{
+        //    var posts = db.Posts.Include(p => p.Category);
+        //    return View(posts.ToList());
+        //}
 
         // GET: Posts/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
-            Post post = db.Posts.Find(id);
-            if (post == null)
+            PostCommentViewModel postComment = new PostCommentViewModel();
+            postComment.post = db.Posts.SingleOrDefault(c => c.PostId == id);
+            postComment.comments = db.Comments.Include(c => c.Post).ToList();
+            //Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
+            if (postComment.post == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
-            return View(post);
+            return View("Details",postComment);
         }
 
-        // GET: Posts/Details/5
-        //This function use PostViewModel and returns a list of post with the same categoryId
-        //public ActionResult PostByCategory(int? categoryId)
-        //{
-        //    PostViewModel model = new PostViewModel
-        //    {
-        //        Posts = (from p in db.Posts where p.CategoryId == categoryId select new Post() {
-        //            PostId = p.PostId,
-        //            PostTime = p.PostTime,
-        //            Subject = p.Subject,
-        //            Content = p.Content,
-        //            Author = p.Author,
-
-        //        }).ToList(),
-
-        //        Category = db.Categories.Find(categoryId)
-        //    };
-
-        //    return View(model);
-        //}
 
 
         // GET: Posts/Create
@@ -65,7 +60,7 @@ namespace Group7A2.Controllers
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name");
-            return View();
+            return View("Create");
         }
 
         // POST: Posts/Create
@@ -79,13 +74,14 @@ namespace Group7A2.Controllers
             if (ModelState.IsValid)
             {
                 post.Author = User.Identity.Name;
-                db.Posts.Add(post);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                db.Save(post);
+                //db.SaveChanges();
+                //return RedirectToAction("Create");
+                return RedirectToAction("PostList", "Categories", new {  id = post.CategoryId });
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
-            return View(post);
+            return View("Create", post);
         }
 
         // GET: Posts/Edit/5
@@ -94,15 +90,17 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
-            Post post = db.Posts.Find(id);
+            Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
             if (post == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
-            return View(post);
+            return View("Edit", post);
         }
 
         // POST: Posts/Edit/5
@@ -111,16 +109,18 @@ namespace Group7A2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "PostId,Subject,Content,CategoryId,Author,PostTime")] Post post)
+        public ActionResult Edit([Bind(Include = "PostId,Subject,Content,CategoryId")] Post post)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(post).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                post.Author = User.Identity.Name;
+                //db.Entry(post).State = EntityState.Modified;
+                //db.SaveChanges();
+                db.Save(post);
+                return RedirectToAction("Details", new { id = post.PostId});
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
-            return View(post);
+            return View("Edit", post);
         }
 
         // GET: Posts/Delete/5
@@ -129,14 +129,17 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
-            Post post = db.Posts.Find(id);
+            Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
             if (post == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
-            return View(post);
+            return View("Delete", post); 
+            
         }
 
         // POST: Posts/Delete/5
@@ -145,10 +148,16 @@ namespace Group7A2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Post post = db.Posts.Find(id);
-            db.Posts.Remove(post);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
+            
+            if (post == null)
+            {
+                return View("Error");
+            }
+            int categoryId = post.CategoryId;
+            db.Delete(post);
+            return RedirectToAction("PostList", "Categories", new { id = categoryId });
         }
 
         protected override void Dispose(bool disposing)

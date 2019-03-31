@@ -5,12 +5,13 @@ using System.Web;
 
 namespace Group7A2.Models
 {
-    public interface ICategoryRepository
+    public interface IPostRepository
     {
-        IQueryable<Category> Categories { get; }
         IQueryable<Post> Posts { get; }
-        Category Save(Category category);
-        void Delete(Category category);
+        IQueryable<Category> Categories { get; }
+        IQueryable<Comment> Comments { get; }
+        Post Save(Post post);
+        void Delete(Post post);
         void Dispose();
     }
 }

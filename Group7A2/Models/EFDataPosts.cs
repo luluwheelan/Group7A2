@@ -5,18 +5,19 @@ using System.Web;
 
 namespace Group7A2.Models
 {
-    //This class will connect to database 
-    public class EFDataCategories : ICategoryRepository
+    public class EFDataPosts : IPostRepository
     {
         //db connection
         private Group7A2Context db = new Group7A2Context();
-        public IQueryable<Category> Categories { get { return db.Categories; } }
-
         public IQueryable<Post> Posts { get { return db.Posts; } }
 
-        public void Delete(Category category)
+        public IQueryable<Category> Categories { get { return db.Categories; } }
+
+        public IQueryable<Comment> Comments { get { return db.Comments; } }
+         
+        public void Delete(Post post)
         {
-            db.Categories.Remove(category);
+            db.Posts.Remove(post);
             db.SaveChanges();
         }
 
@@ -25,19 +26,18 @@ namespace Group7A2.Models
             db.Dispose();
         }
 
-        public Category Save(Category category)
+        public Post Save(Post post)
         {
-            if(category.CategoryId == 0)
+            if (post.PostId == 0)
             {
-                db.Categories.Add(category);
+                db.Posts.Add(post);
             }
             else
             {
-                db.Entry(category).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(post).State = System.Data.Entity.EntityState.Modified;
             }
             db.SaveChanges();
-            return category;
+            return post;
         }
-
     }
 }

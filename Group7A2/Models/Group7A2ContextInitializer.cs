@@ -16,12 +16,12 @@ namespace Group7A2.Models
 
             Category club = new Category { Name = "Clubs", Description = "Join a club" };
 
-            Category news = new Category { Name = "News", Description = "What is happening" };
+            Category general = new Category { Name = "General", Description = "What is happening" };
 
             context.Categories.Add(books);
             context.Categories.Add(carPool);
             context.Categories.Add(club);
-            context.Categories.Add(news);
+            context.Categories.Add(general);
 
             Post p1 = new Post
             {
@@ -38,10 +38,26 @@ namespace Group7A2.Models
                 Category = carPool,
 
             };
+            Post p3 = new Post
+            {
+                Subject = "Barrie south to north",
+                Content = "Every monday morning leave at 7:30.",
+                Category = carPool,
+
+            };
+            Post p4 = new Post
+            {
+                Subject = "Looking for CSS book",
+                Content = "Looking for CSS Pocket Reference, 4th Edition",
+                Category = books,
+            };
+
 
 
             context.Posts.Add(p1);
             context.Posts.Add(p2);
+            context.Posts.Add(p3);
+            context.Posts.Add(p4);
 
             Comment c1 = new Comment
             {

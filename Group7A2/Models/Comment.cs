@@ -15,6 +15,7 @@ namespace Group7A2.Models
 
         [Required(ErrorMessage = "What is your opinion?")]
         [DisplayName("Comment")]
+        [DataType(DataType.MultilineText)]
         [StringLength(500, MinimumLength = 10)]
         public virtual string Content { get; set; }
 

@@ -29,6 +29,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav pt-5">
                     <li class="nav-item">@Html.ActionLink("What's New", "", "Home")</li>
+                    <li class="nav-item">@Html.ActionLink("Create A Post", "Create", "Posts")</li>
                     <li class="nav-item">@Html.ActionLink("Contact Us", "Contact", "Home")</li>
 
                 </ul>
@@ -47,9 +48,8 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    @*<script src="~/Scripts/app/musicscripts.js"></script>*@
+    @*<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

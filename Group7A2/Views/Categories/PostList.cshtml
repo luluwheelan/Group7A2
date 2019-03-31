@@ -1,0 +1,27 @@
+﻿
+@model Group7A2.Models.Category
+
+@{
+    ViewBag.Title = "PostList";
+}
+
+<div class="container">
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
+</div>
+
+<div class="container">
+    <hr />
+    @foreach (var com in Model.Posts)
+    {
+        <div class="col-md-12  jumbotron-fluid mt-5 bg-light pl-3">
+            <h3>@Html.DisplayFor(modelItem => com.Subject)</h3> <p> Post By: @Html.DisplayFor(modelItem => com.Author) | @Html.DisplayFor(modelItem => com.PostTime) <button class="btn btn-link">@Html.ActionLink("Detail", "Details", "Posts", new { id = com.PostId }, null) >></button></p>
+            <p>
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Delete This Post", "Delete", "Posts", new { id = com.PostId }, null)
+                }
+                    </p>
+            <hr />
+        </div>
+    }
+    </div>

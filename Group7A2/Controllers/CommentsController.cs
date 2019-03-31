@@ -10,38 +10,50 @@ using Group7A2.Models;
 
 namespace Group7A2.Controllers
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
-        private Group7A2Context db = new Group7A2Context();
+        ICommentRepository db;
+
+        public CommentsController()
+        {
+            this.db = new EFDataComments();
+        }
+        //If the contrustor pass in parameter, will use mock date, mean it is for testing.
+        public CommentsController(ICommentRepository mockDb)
+        {
+            this.db = mockDb;
+        }
 
         // GET: Comments
-        public ActionResult Index()
-        {
-            var comments = db.Comments.Include(c => c.Post);
-            return View(comments.ToList());
-        }
+        //public ActionResult Index()
+        //{
+        //    var comments = db.Comments.Include(c => c.Post);
+        //    return View(comments.ToList());
+        //}
 
         // GET: Comments/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = db.Comments.Find(id);
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(comment);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    //Comment comment = db.Comments.Find(id);
+        //    Comment comment = db.Comments.SingleOrDefault(c => c.CommentId == id);
+        //    if (comment == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(comment);
+        //}
 
         // GET: Comments/Create
         [Authorize]
         public ActionResult Create()
         {
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject");
-            return View();
+            return View("Create");
         }
 
         // POST: Comments/Create
@@ -54,13 +66,15 @@ namespace Group7A2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Comments.Add(comment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //db.Comments.Add(comment);
+                //db.SaveChanges();
+                int postId = comment.PostId;
+                db.Save(comment);
+                return RedirectToAction("Details", "Posts",new { id = postId});
             }
 
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
-            return View(comment);
+            return View("Create", comment);
         }
 
         // GET: Comments/Edit/5
@@ -69,15 +83,18 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
-            Comment comment = db.Comments.Find(id);
+            //Comment comment = db.Comments.Find(id);
+            Comment comment = db.Comments.SingleOrDefault(c => c.CommentId == id);
             if (comment == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
-            return View(comment);
+            return View("Edit", comment);
         }
 
         // POST: Comments/Edit/5
@@ -90,12 +107,16 @@ namespace Group7A2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                //db.Entry(comment).State = EntityState.Modified;
+                //db.SaveChanges();
+                db.Save(comment);
+                int postId = comment.PostId;
+                return RedirectToAction("Details", "Posts", new { id = postId });
             }
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
+            
             return View(comment);
+            
         }
 
         // GET: Comments/Delete/5
@@ -104,12 +125,15 @@ namespace Group7A2.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
             }
-            Comment comment = db.Comments.Find(id);
+            //Comment comment = db.Comments.Find(id);
+            Comment comment = db.Comments.SingleOrDefault(c => c.CommentId == id);
             if (comment == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return View("Error");
             }
             return View(comment);
         }
@@ -120,12 +144,15 @@ namespace Group7A2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            //Comment comment = db.Comments.Find(id);
+            Comment comment = db.Comments.SingleOrDefault(c => c.CommentId == id);
+            //db.Comments.Remove(comment);
+            //db.SaveChanges();
+            db.Delete(comment);
+            int postId = comment.PostId;
+            return RedirectToAction("Details", "Posts", new { id = postId });
         }
-
+         
         protected override void Dispose(bool disposing)
         {
             if (disposing)
