@@ -28,7 +28,8 @@ namespace Group7A2.Models
                 Subject = "Sell Java book",
                 Content = "The “for dummies” books are rarely worth the money if you already have some experience writing code. But for absolute beginners these books are often perfect because they’re written clearly in plain English without too many confusing terms.",
                 Category = books,
-                PostTime = DateTime.Now.Date.AddHours(1).AddMinutes(30)
+                PostTime = DateTime.Now.Date.AddHours(1).AddMinutes(30),
+                Author = "Lulu"
 
             };
 
@@ -37,7 +38,8 @@ namespace Group7A2.Models
                 Subject = "Orillia to Barrie",
                 Content = "Every monday to friday.",
                 Category = carPool,
-                PostTime = DateTime.Now.Date.AddHours(3).AddMinutes(30)
+                PostTime = DateTime.Now.Date.AddHours(3).AddMinutes(30),
+                Author = "Lulu"
 
             };
             Post p3 = new Post
@@ -45,7 +47,8 @@ namespace Group7A2.Models
                 Subject = "Barrie south to north",
                 Content = "Every monday morning leave at 7:30.",
                 Category = carPool,
-                PostTime = DateTime.Now.Date.AddHours(5).AddMinutes(30)
+                PostTime = DateTime.Now.Date.AddHours(5).AddMinutes(30),
+                Author = "Lulu"
 
             };
             Post p4 = new Post
@@ -53,7 +56,8 @@ namespace Group7A2.Models
                 Subject = "Looking for CSS book",
                 Content = "Looking for CSS Pocket Reference, 4th Edition",
                 Category = books,
-                PostTime = DateTime.Now.Date.AddHours(24).AddMinutes(30)
+                PostTime = DateTime.Now.Date.AddHours(24).AddMinutes(30),
+                Author = "Lulu"
             };
 
 
@@ -67,12 +71,16 @@ namespace Group7A2.Models
             {
                 Content = "I want your book",
                 Post = p1,
+                Author = "Lulu",
+                PostTime = DateTime.Now.Date.AddHours(24).AddMinutes(30)
             };
 
             Comment c2 = new Comment
             {
                 Content = "How much for your book",
                 Post = p1,
+                Author = "Lulu",
+                PostTime = DateTime.Now.Date.AddHours(2).AddMinutes(30)
             };
             context.Comments.Add(c1);
             context.Comments.Add(c2);

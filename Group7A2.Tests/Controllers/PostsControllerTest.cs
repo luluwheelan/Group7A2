@@ -30,9 +30,9 @@ namespace Group7A2.Tests.Controllers
             {
                 new Post {
                     PostId = 1,
-                    //Author = User.Identity.Name,
                     Subject = "Mock post 1",
                     Content = "Every monday to friday.",
+                    Author = "Lulu",
                     CategoryId = 1,
                     Comments = new List<Comment>{
                         new Comment{CommentId = 1, Content = "Comment 1"
@@ -50,6 +50,7 @@ namespace Group7A2.Tests.Controllers
             {
                 Subject = "Orillia to Barrie",
                 Content = "Every monday to friday.",
+                Author = "Lulu",
                 Category = new Category { CategoryId = 1, Description = "Cateogry fake description", Name = "fake category"},
 
             };
@@ -67,10 +68,10 @@ namespace Group7A2.Tests.Controllers
         public void DetailsReturnValidPost()
         {
             // act
-            var actual = (Post)((ViewResult)controller.Details(1)).Model;
+            var actual = (PostCommentViewModel)((ViewResult)controller.Details(1)).Model;
 
             // assert
-            Assert.AreEqual(posts.ToList()[0], actual);
+            Assert.IsInstanceOfType(actual, typeof(PostCommentViewModel));
         }
 
         [TestMethod]

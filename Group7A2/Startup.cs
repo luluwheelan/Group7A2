@@ -47,6 +47,7 @@ namespace Group7A2
         private static void AddAdmin(UserManager<ApplicationUser> UserManager,string Email)
         {
             ApplicationUser user = UserManager.FindByEmail(Email);
+            if (user == null) return;
             var result1 = UserManager.AddToRole(user.Id, "Admin");
          
         }

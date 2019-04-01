@@ -43,7 +43,7 @@ namespace Group7A2.Controllers
             }
             PostCommentViewModel postComment = new PostCommentViewModel();
             postComment.post = db.Posts.SingleOrDefault(c => c.PostId == id);
-            postComment.comments = db.Comments.Include(c => c.Post).ToList();
+            //postComment.Comments = db.Comments.Include(c => c.Post).ToList();
             //Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
             if (postComment.post == null)
             {
@@ -53,7 +53,28 @@ namespace Group7A2.Controllers
             return View("Details",postComment);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Details([Bind(Include = "Content, PostId")]Comment newComment)
+        {
+            PostCommentViewModel vm;
+            if (ModelState.IsValid)
+            {
+                newComment.Author = User.Identity.Name;
+                
+                db.Comments.Add(newComment);
+                db.Save(vm.post);
 
+
+            }
+
+            vm = new PostCommentViewModel()
+            {
+
+            };
+            return PartialView("Details", vm);
+
+        }
 
         // GET: Posts/Create
         [Authorize]

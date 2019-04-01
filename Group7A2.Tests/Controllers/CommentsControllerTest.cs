@@ -80,5 +80,46 @@ namespace Group7A2.Tests.Controllers
             // assert
             Assert.AreEqual("Create", actual.ViewName);
         }
+
+        [TestMethod]
+        public void DeleteWithValidId()
+        {
+            //Arrange
+            int id = 1;
+            // act
+            ViewResult actual = controller.Delete(id) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Delete", actual.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DeleteWithInValidId()
+        {
+            //Arrange
+            int id = 20;
+            // act
+            ViewResult result = controller.Delete(id) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+
+        [TestMethod]
+        public void DeleteConfirmedInvalidIdReturnError()
+        {
+            //Arrange
+            int id = 20;
+            // act
+            ViewResult actual = controller.DeleteConfirmed(id) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+
+
     }
 }

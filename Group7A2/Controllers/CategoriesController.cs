@@ -55,11 +55,13 @@ namespace Group7A2.Controllers
             }
             //Category category = db.Categories.Find(id);
             Category category = db.Categories.SingleOrDefault(c => c.CategoryId == id);
+            
             if (category == null)
             {
                 //return HttpNotFound();
                 return View("Error");
             }
+            category.Posts = category.Posts.OrderByDescending(p => p.PostTime).ToList();
             return View(category);
         }
 
