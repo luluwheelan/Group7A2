@@ -32,14 +32,6 @@ namespace Group7A2
                 role.Name = "Admin";
                 roleManager.Create(role);
 
-                //Here we create a Admin user who will maintain the website content.            	 
-                //
-                //if (user != null)
-                //{
-                //    
-                //    |
-                //}
-
             }
             AddAdmin(UserManager,"group7a2@gmail.com");
         }

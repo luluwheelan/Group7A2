@@ -26,9 +26,11 @@ namespace Group7A2.Tests.Controllers
             {
                 new Comment
             {
+                    CommentId = 100,
                 Content = "I want your book",
                 Post = new Post
                 {
+                    PostId = 100,
                     Subject = "Sell Java book",
                     Content = "Post fake content",
                     CategoryId = 1,
@@ -85,12 +87,12 @@ namespace Group7A2.Tests.Controllers
         public void DeleteWithValidId()
         {
             //Arrange
-            int id = 1;
+            int validId = 100;
             // act
-            ViewResult actual = controller.Delete(id) as ViewResult;
+            var result = controller.DeleteConfirmed(validId) as RedirectToRouteResult;
 
             // assert
-            Assert.AreEqual("Delete", actual.ViewName);
+            Assert.AreEqual("Posts", result.RouteValues["Controller"]);
 
         }
 
@@ -98,27 +100,74 @@ namespace Group7A2.Tests.Controllers
         public void DeleteWithInValidId()
         {
             //Arrange
-            int id = 20;
+            int inValidId = 20;
             // act
-            ViewResult result = controller.Delete(id) as ViewResult;
+            ViewResult result = controller.Delete(inValidId) as ViewResult;
 
             // assert
             Assert.AreEqual("Error", result.ViewName);
         }
 
-
         [TestMethod]
-        public void DeleteConfirmedInvalidIdReturnError()
+        public void EditWithValidId()
         {
-            //Arrange
-            int id = 20;
-            // act
-            ViewResult actual = controller.DeleteConfirmed(id) as ViewResult;
+            int validId = 100;
+            // act           
+            ViewResult actual = controller.Edit(validId) as ViewResult;
 
-            // assert
-            Assert.AreEqual("Error", actual.ViewName);
+            // assert           
+            Assert.AreEqual("Edit", actual.ViewName);
         }
 
+        [TestMethod]
+        public void EditWithInvalidId()
+        {
+            int invalidId = 3;
+            // act           
+            ViewResult actual = controller.Edit(invalidId) as ViewResult;
+
+            // assert           
+            Assert.AreEqual("Error", actual.ViewName);
+
+        }
+        [TestMethod]
+        public void EditInvalidModelReturnEditView()
+        {
+
+            // arrange
+            controller.ModelState.AddModelError("key", "some error here");
+
+            // act
+            ViewResult actual = (ViewResult)controller.Edit(comments[0]);
+
+            // assert
+            Assert.AreEqual("Edit", actual.ViewName);
+
+        }
+
+        // POST: Edit
+        [TestMethod]
+        public void EditSaveValidReturnPostDetailView()
+        {
+
+            // act 
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(comments[0]);
+
+            // assert
+            Assert.AreEqual("Details", actual.RouteValues["action"]);
+        }
+
+        // POST: Edit
+        [TestMethod]
+        public void EditSaveValidReturnPostDetail()
+        {
+
+            // act 
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(comments[0]);
+
+            // assert
+            Assert.AreEqual("Posts", actual.RouteValues["controller"]);
+        }
 
 
     }

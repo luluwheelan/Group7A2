@@ -115,7 +115,7 @@ namespace Group7A2.Controllers
             }
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
             
-            return View(comment);
+            return View("Edit", comment);
             
         }
 
