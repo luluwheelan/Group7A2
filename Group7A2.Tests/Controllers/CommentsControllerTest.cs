@@ -97,6 +97,29 @@ namespace Group7A2.Tests.Controllers
         }
 
         [TestMethod]
+        public void DeleteWithInvalidId()
+        {
+            //Arrange
+            int inValidId = 1000;
+            // act
+            var result = controller.DeleteConfirmed(inValidId) as ViewResult;
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DeleteInValidId()
+        {
+            //act 
+            var actual = controller.Delete(400) as ViewResult;
+
+            //assert 
+            Assert.IsNull(actual.Model);
+        }
+
+        [TestMethod]
         public void DeleteWithInValidId()
         {
             //Arrange

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 using Group7A2.Controllers;
 using Group7A2.Models;
@@ -24,7 +26,16 @@ namespace Group7A2.Tests.Controllers
         {
             // arrange
             mock = new Mock<IPostRepository>();
+            // mock user sign in
+            var fakeHttpContext = new Mock<HttpContextBase>();
+            var fakeIdentity = new GenericIdentity("User");
+            var principal = new GenericPrincipal(fakeIdentity, null);
 
+            fakeHttpContext.Setup(t => t.User).Returns(principal);
+            var controllerContext = new Mock<ControllerContext>();
+            controllerContext.Setup(t => t.HttpContext).Returns(fakeHttpContext.Object);
+
+           
             // mock Post data
             posts = new List<Post>
             {
@@ -61,6 +72,10 @@ namespace Group7A2.Tests.Controllers
 
             // pass the mock to the controller
             controller = new PostsController(mock.Object);
+
+
+            //Set controller ControllerContext with fake context
+            controller.ControllerContext = controllerContext.Object;
         }
 
 
@@ -138,15 +153,15 @@ namespace Group7A2.Tests.Controllers
         }
 
         // POST: Create
-        //[TestMethod]
-        //public void CreateSaveValidDataReturnToCategoryController()
-        //{
-        //    // act - turn the ActionResult to a RedirectToRouteResult
-        //    var actual = controller.Create(posts[2]) as RedirectToRouteResult;
+        [TestMethod]
+        public void CreateSaveValidDataReturnToCategoryController()
+        {
+            // act - turn the ActionResult to a RedirectToRouteResult
+            var actual = controller.Create(posts[2]) as RedirectToRouteResult;
 
-        //    // assert
-        //    Assert.AreEqual("Categories", actual.RouteValues["Controller"]);
-        //}
+            // assert
+            Assert.AreEqual("Categories", actual.RouteValues["Controller"]);
+        }
 
         [TestMethod]
         public void CreateSaveInvalidModelReturnError()
@@ -307,15 +322,15 @@ namespace Group7A2.Tests.Controllers
 
 
         // POST: Edit
-        //[TestMethod]
-        //public void EditSaveValid()
-        //{
-        //    // act - casting the ActionResult to a RedirectToRouteResult
-        //    RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(posts[0]);
+        [TestMethod]
+        public void EditSaveValid()
+        {
+            // act - casting the ActionResult to a RedirectToRouteResult
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(posts[0]);
 
-        //    // assert
-        //    Assert.AreEqual("Details", actual.RouteValues["action"]);
-        //}
+            // assert
+            Assert.AreEqual("Details", actual.RouteValues["action"]);
+        }
 
         [TestMethod]
         public void EditSaveInvalidModel()
