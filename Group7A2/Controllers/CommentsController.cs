@@ -71,11 +71,12 @@ namespace Group7A2.Controllers
                 //db.SaveChanges();
                 int postId = comment.PostId;
                 db.Save(comment);
-                return PartialView("Details", comment);
+               // return PartialView("Details", comment);
+                return RedirectToAction("Details", "Posts", new { id = postId});
             }
 
             //ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
-            return PartialView("Create", comment);
+            return View("Create", comment);
         }
 
         // GET: Comments/Edit/5

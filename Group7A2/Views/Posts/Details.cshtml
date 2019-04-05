@@ -43,37 +43,42 @@
                 </div>
             }
 
+            @Html.ActionLink("Comment on this post", "Create", "Comments", new { id = Model.post.PostId }, null)
+
             <hr />
 
-            @using (Ajax.BeginForm("CreateComment", "Posts", new AjaxOptions
-            {
-                InsertionMode = InsertionMode.Replace,
-                HttpMethod = "POST",
-                UpdateTargetId = "MainBody",
-            }))
-            {
-                @Html.AntiForgeryToken()
+            @*@using (Ajax.BeginForm("CreateComment", "Posts", new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            UpdateTargetId = "MainBody",
+        }))
+        {
+            @Html.AntiForgeryToken()
 
-                <div class="form-horizontal">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.newComment.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.newComment.Content, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.newComment.Content, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.newComment.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.newComment.Content, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.newComment.Content, "", new { @class = "text-danger" })
 
-                    @Html.HiddenFor(model => model.post.PostId)
+                        @Html.HiddenFor(model => model.post.PostId, new { Value = @Model.post.PostId })
 
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Submit" class="btn btn-default" />
-                        </div>
                     </div>
                 </div>
 
-            }
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Submit" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+
+        }*@
 
         </div>
     </div>

@@ -53,35 +53,6 @@ namespace Group7A2.Controllers
             return View("Details",postComment);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Details([Bind(Include = "Content, PostId")]Comment newComment)
-        //{
-        //    int id = newComment.PostId;
-        //    PostCommentViewModel vm;
-        //    if (ModelState.IsValid)
-        //    {
-        //        newComment.Author = User.Identity.Name;
-        //        //db.Save(newComment);
-        //        ModelState.Clear();
-        //        vm = new PostCommentViewModel()
-        //        {
-        //            //post = db.ForumPosts.ToList(),
-        //            post = db.Posts.SingleOrDefault(c => c.PostId == id),
-        //    };
-        //        return PartialView("Details", vm);
-
-
-        //    }
-
-        //    vm = new PostCommentViewModel()
-        //    {
-        //        post = db.Posts.SingleOrDefault(c => c.PostId == id),
-        //        newComment = newComment
-        //    };
-        //    return PartialView("Details", vm);
-
-        //}
 
         // GET: Posts/Create
         [Authorize]
@@ -112,27 +83,6 @@ namespace Group7A2.Controllers
             return View("Create", post);
         }
 
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateComment([Bind(Include = "CommentId,Content,PostId")] Comment newComment)
-        {
-            PostCommentViewModel pc = new PostCommentViewModel();
-            int id = newComment.PostId;
-            if (ModelState.IsValid)
-            {
-                newComment.Author = User.Identity.Name;
-                //db.Comments.Add(comment);
-                //db.SaveChanges();
-                
-                db.Save(newComment);
-                pc.post = db.Posts.SingleOrDefault(c => c.PostId == id);
-                return PartialView("Details", pc);
-            }
-
-            pc.post = db.Posts.SingleOrDefault(c => c.PostId == id);
-            return PartialView("Details", pc);
-        }
 
         // GET: Posts/Edit/5
         [Authorize]
