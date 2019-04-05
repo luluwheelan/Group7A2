@@ -43,7 +43,8 @@ namespace Group7A2.Controllers
             }
             PostCommentViewModel postComment = new PostCommentViewModel();
             postComment.post = db.Posts.SingleOrDefault(c => c.PostId == id);
-            //postComment.Comments = db.Comments.Include(c => c.Post).ToList();
+            //postComment.post.Comments = db.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
+            postComment.post.Comments = postComment.post.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
             //Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
             if (postComment.post == null)
             {
@@ -53,35 +54,6 @@ namespace Group7A2.Controllers
             return View("Details",postComment);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Details([Bind(Include = "Content, PostId")]Comment newComment)
-        //{
-        //    int id = newComment.PostId;
-        //    PostCommentViewModel vm;
-        //    if (ModelState.IsValid)
-        //    {
-        //        newComment.Author = User.Identity.Name;
-        //        //db.Save(newComment);
-        //        ModelState.Clear();
-        //        vm = new PostCommentViewModel()
-        //        {
-        //            //post = db.ForumPosts.ToList(),
-        //            post = db.Posts.SingleOrDefault(c => c.PostId == id),
-        //    };
-        //        return PartialView("Details", vm);
-
-
-        //    }
-
-        //    vm = new PostCommentViewModel()
-        //    {
-        //        post = db.Posts.SingleOrDefault(c => c.PostId == id),
-        //        newComment = newComment
-        //    };
-        //    return PartialView("Details", vm);
-
-        //}
 
         // GET: Posts/Create
         [Authorize]
@@ -92,8 +64,6 @@ namespace Group7A2.Controllers
         }
 
         // POST: Posts/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -121,12 +91,15 @@ namespace Group7A2.Controllers
             int id = newComment.PostId;
             if (ModelState.IsValid)
             {
+
                 newComment.Author = User.Identity.Name;
                 //db.Comments.Add(comment);
                 //db.SaveChanges();
                 
                 db.Save(newComment);
                 pc.post = db.Posts.SingleOrDefault(c => c.PostId == id);
+                pc.post.Comments = pc.post.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
+                ModelState.Clear();
                 return PartialView("Details", pc);
             }
 

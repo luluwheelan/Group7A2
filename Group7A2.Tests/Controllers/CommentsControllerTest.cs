@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 using Group7A2.Controllers;
 using Group7A2.Models;
@@ -17,9 +19,22 @@ namespace Group7A2.Tests.Controllers
         List<Comment> comments;
         Mock<ICommentRepository> mock;
 
+        
+
         [TestInitialize]
         public void TestInitialize()
         {
+            // add Comment data to the mock object
+            mock = new Mock<ICommentRepository>();
+
+            // mock user sign in
+            var fakeHttpContext = new Mock<HttpContextBase>();
+            var fakeIdentity = new GenericIdentity("User");
+            var principal = new GenericPrincipal(fakeIdentity, null);
+
+            fakeHttpContext.Setup(t => t.User).Returns(principal);
+            var controllerContext = new Mock<ControllerContext>();
+            controllerContext.Setup(t => t.HttpContext).Returns(fakeHttpContext.Object);
 
             // mock Comment data
             comments = new List<Comment>
@@ -40,13 +55,14 @@ namespace Group7A2.Tests.Controllers
             };
 
 
-            // add Comment data to the mock object
-            mock = new Mock<ICommentRepository>();
+            
             mock.Setup(m => m.Comments).Returns(comments
                 .AsQueryable());
 
             // pass the mock to the controller
             controller = new CommentsController(mock.Object);
+            //Set controller ControllerContext with fake context
+            controller.ControllerContext = controllerContext.Object;
         }
 
         [TestMethod]
@@ -96,18 +112,18 @@ namespace Group7A2.Tests.Controllers
 
         }
 
-        [TestMethod]
-        public void DeleteWithInvalidId()
-        {
-            //Arrange
-            int inValidId = 1000;
-            // act
-            var result = controller.DeleteConfirmed(inValidId) as ViewResult;
+        //[TestMethod]
+        //public void DeleteWithInvalidId()
+        //{
+        //    //Arrange
+        //    int inValidId = 1000;
+        //    // act
+        //    var result = controller.DeleteConfirmed(inValidId) as ViewResult;
 
-            // assert
-            Assert.AreEqual("Error", result.ViewName);
+        //    // assert
+        //    Assert.AreEqual("Error", result.ViewName);
 
-        }
+        //}
 
         [TestMethod]
         public void DeleteInValidId()
