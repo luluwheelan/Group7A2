@@ -13,5 +13,6 @@ namespace Group7A2.Models
         Post Save(Post post);
         void Delete(Post post);
         void Dispose();
+        Comment Save(Comment comment);
     }
 }

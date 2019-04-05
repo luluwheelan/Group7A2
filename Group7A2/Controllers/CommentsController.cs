@@ -48,8 +48,8 @@ namespace Group7A2.Controllers
         //    return View(comment);
         //}
 
-        // GET: Comments/Create
-        [Authorize]
+        //GET: Comments/Create
+       [Authorize]
         public ActionResult Create()
         {
             ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject");
@@ -62,19 +62,20 @@ namespace Group7A2.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CommentId,Content,PostId,Author,PostTime")] Comment comment)
+        public ActionResult Create([Bind(Include = "CommentId,Content,PostId")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.Author = User.Identity.Name;
                 //db.Comments.Add(comment);
                 //db.SaveChanges();
                 int postId = comment.PostId;
                 db.Save(comment);
-                return RedirectToAction("Details", "Posts",new { id = postId});
+                return PartialView("Details", comment);
             }
 
-            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
-            return View("Create", comment);
+            //ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
+            return PartialView("Create", comment);
         }
 
         // GET: Comments/Edit/5

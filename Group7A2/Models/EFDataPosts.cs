@@ -40,5 +40,34 @@ namespace Group7A2.Models
             return post;
         }
 
+
+        //public void Save(Comment comment)
+        //{
+        //    if (comment.CommentId == 0)
+        //    {
+        //        db.Comments.Add(comment);
+        //    }
+        //    else
+        //    {
+        //        db.Entry(comment).State = System.Data.Entity.EntityState.Modified;
+        //    }
+        //    db.SaveChanges();
+        //}
+
+        public Comment Save(Comment comment)
+        {
+            if (comment.CommentId == 0)
+            {
+                db.Comments.Add(comment);
+            }
+            else
+            {
+                db.Entry(comment).State = System.Data.Entity.EntityState.Modified;
+            }
+            db.SaveChanges();
+            return comment;
+        }
+
+
     }
 }

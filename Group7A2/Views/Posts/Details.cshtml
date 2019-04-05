@@ -3,70 +3,77 @@
 @{
     ViewBag.Title = "Details";
 }
-<div id="MainBody">
+
     <div class="container">
         <h4>Back to @Html.ActionLink(Model.post.Category.Name, "PostList", "Categories", new { id = Model.post.CategoryId }, null) post list</h4>
     </div>
 
-    <div class="container">
-        <h2>@Html.DisplayFor(model => model.post.Subject)</h2>
-        <p>Post By: @Html.DisplayFor(model => model.post.Author) </p>
-        <p>@Html.DisplayFor(model => model.post.PostTime)</p>
-        <hr />
-        <p>@Html.DisplayFor(model => model.post.Content)</p>
-        @if (User.IsInRole("Admin"))
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.post.PostId })
-        }
-        @if (User.IsInRole("Admin"))
-        {
-            @Html.ActionLink("Delete", "Delete", new { id = Model.post.PostId })
-        }
-        <hr />
-        @foreach (var com in Model.post.Comments)
-        {
-            <div class="col-md-12  jumbotron-fluid mt-5 bg-light pl-3">
-                <p>@Html.DisplayFor(modelItem => com.Content)</p>
-                <p>Comment By: @Html.DisplayFor(modelItem => com.Author)</p>
-                <p>@Html.DisplayFor(modelItem => com.PostTime)</p>
-                @if (User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Edit this comment", "Edit", "Comments", new { id = com.CommentId }, null)
-                }
-                @if (User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Delete this comment", "Delete", "Comments", new { id = com.CommentId }, null)
-                }
-                <hr />
-            </div>
-        }
-        <hr />
 
-        @using (Ajax.BeginForm("Details", "Posts", new AjaxOptions
-        {
-            InsertionMode = InsertionMode.Replace,
-            HttpMethod = "POST",
-            UpdateTargetId = "MainBody",
-        }))
-        {
-            @Html.AntiForgeryToken()
+    <div id="MainBody">
+        <div class="container">
+            <h2>@Html.DisplayFor(model => model.post.Subject)</h2>
+            <p>Post By: @Html.DisplayFor(model => model.post.Author) </p>
+            <p>@Html.DisplayFor(model => model.post.PostTime)</p>
+            <hr />
+            <p>@Html.DisplayFor(model => model.post.Content)</p>
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = Model.post.PostId })
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Delete", "Delete", new { id = Model.post.PostId })
+            }
+            <hr />
+            @foreach (var com in Model.post.Comments)
+            {
+                <div class="col-md-12  jumbotron-fluid mt-5 bg-light pl-3">
+                    <p>@Html.DisplayFor(modelItem => com.Content)</p>
+                    <p>Comment By: @Html.DisplayFor(modelItem => com.Author)</p>
+                    <p>@Html.DisplayFor(modelItem => com.PostTime)</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Edit this comment", "Edit", "Comments", new { id = com.CommentId }, null)
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Delete this comment", "Delete", "Comments", new { id = com.CommentId }, null)
+                    }
+                    <hr />
+                </div>
+            }
 
-            <div class="form-horizontal">
-                <h4>Add comment</h4>
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.newComment.Content, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.HiddenFor(model => model.post.PostId)
+            <hr />
+
+            @using (Ajax.BeginForm("CreateComment", "Posts", new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                UpdateTargetId = "MainBody",
+            }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.newComment.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.newComment.Content, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.newComment.Content, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @Html.HiddenFor(model => model.post.PostId)
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Submit" class="btn btn-default" />
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Details" class=" btn btn-default" />
-                    </div>
-                </div>
-            </div>
-        }
 
+            }
+
+        </div>
     </div>
-</div>

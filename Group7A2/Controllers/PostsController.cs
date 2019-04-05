@@ -26,7 +26,7 @@ namespace Group7A2.Controllers
             this.db = mockDb;
         }
 
-        // GET: Posts
+        // GET: PostsEFDataPosts
         //public ActionResult Index()
         //{
         //    var posts = db.Posts.Include(p => p.Category);
@@ -105,11 +105,33 @@ namespace Group7A2.Controllers
                 db.Save(post);
                 //db.SaveChanges();
                 //return RedirectToAction("Create");
-                return RedirectToAction("PostList", "Categories", new {  id = post.CategoryId });
+                return RedirectToAction("PostList", "Categories", new { id = post.CategoryId });
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoryId", "Name", post.CategoryId);
             return View("Create", post);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateComment([Bind(Include = "CommentId,Content,PostId")] Comment newComment)
+        {
+            PostCommentViewModel pc = new PostCommentViewModel();
+            int id = newComment.PostId;
+            if (ModelState.IsValid)
+            {
+                newComment.Author = User.Identity.Name;
+                //db.Comments.Add(comment);
+                //db.SaveChanges();
+                
+                db.Save(newComment);
+                pc.post = db.Posts.SingleOrDefault(c => c.PostId == id);
+                return PartialView("Details", pc);
+            }
+
+            pc.post = db.Posts.SingleOrDefault(c => c.PostId == id);
+            return PartialView("Details", pc);
         }
 
         // GET: Posts/Edit/5
