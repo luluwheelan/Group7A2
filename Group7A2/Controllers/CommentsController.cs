@@ -49,34 +49,34 @@ namespace Group7A2.Controllers
         //}
 
         //GET: Comments/Create
-       [Authorize]
-        public ActionResult Create()
-        {
-            ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject");
-            return View("Create");
-        }
+       //[Authorize]
+       // public ActionResult Create()
+       // {
+       //     ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject");
+       //     return View("Create");
+       // }
 
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CommentId,Content,PostId")] Comment comment)
-        {
-            if (ModelState.IsValid)
-            {
-                comment.Author = User.Identity.Name;
-                //db.Comments.Add(comment);
-                //db.SaveChanges();
-                int postId = comment.PostId;
-                db.Save(comment);
-                return PartialView("Details", comment);
-            }
+        //[Authorize]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "CommentId,Content,PostId")] Comment comment)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        comment.Author = User.Identity.Name;
+        //        //db.Comments.Add(comment);
+        //        //db.SaveChanges();
+        //        int postId = comment.PostId;
+        //        db.Save(comment);
+        //        return PartialView("Details", comment);
+        //    }
 
-            //ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
-            return PartialView("Create", comment);
-        }
+        //    ViewBag.PostId = new SelectList(db.Posts, "PostId", "Subject", comment.PostId);
+        //    return PartialView("Create", comment);
+        //}
 
         // GET: Comments/Edit/5
         [Authorize]

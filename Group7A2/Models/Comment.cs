@@ -13,7 +13,7 @@ namespace Group7A2.Models
         
         public virtual int CommentId { get; set; }
 
-        [Required(ErrorMessage = "What is your opinion?")]
+        [Required(ErrorMessage = "Do not want say anything?")]
         [DisplayName("Comment")]
         [DataType(DataType.MultilineText)]
         [StringLength(500, MinimumLength = 10)]

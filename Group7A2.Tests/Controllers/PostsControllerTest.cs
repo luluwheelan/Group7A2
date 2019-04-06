@@ -19,13 +19,16 @@ namespace Group7A2.Tests.Controllers
         //Create MOQ data
         PostsController controller;
         List<Post> posts;
-        Mock<IPostRepository> mock;
+        Mock<IPostRepository> mockPost;
+        Comment comment;
+        Mock<ICommentRepository> mockComment;
 
         [TestInitialize]
         public void TestInitialize()
         {
             // arrange
-            mock = new Mock<IPostRepository>();
+            mockPost = new Mock<IPostRepository>();
+            mockComment = new Mock<ICommentRepository>();
             // mock user sign in
             var fakeHttpContext = new Mock<HttpContextBase>();
             var fakeIdentity = new GenericIdentity("User");
@@ -46,15 +49,20 @@ namespace Group7A2.Tests.Controllers
                     Author = "Lulu",
                     CategoryId = 1,
                     Comments = new List<Comment>{
-                        new Comment{CommentId = 1, Content = "Comment 1"
+                        new Comment{CommentId = 1, Content = "Comment 1", PostId = 1
                         },
-                        new Comment{CommentId = 2, Content = "Comment 2" }
+                        new Comment{CommentId = 2, Content = "Comment 2", PostId = 1 }
                     } },
                 new Post { PostId = 2,
                     Subject = "Mock post 2",
                     //Author = "Admin",
                     Content = "Every monday to friday.",
-                    CategoryId = 1
+                    CategoryId = 1,
+                    Comments = new List<Comment>{
+                        new Comment{CommentId = 1, Content = "Comment 1", PostId = 1
+                        },
+                        new Comment{CommentId = 2, Content = "Comment 2", PostId = 1 }
+                    }
                 }
             };
             Post p2 = new Post
@@ -63,15 +71,30 @@ namespace Group7A2.Tests.Controllers
                 Content = "Every monday to friday.",
                 Author = "Lulu",
                 Category = new Category { CategoryId = 1, Description = "Cateogry fake description", Name = "fake category"},
+                Comments = new List<Comment>{
+                        new Comment{CommentId = 1, Content = "Comment 1", PostId = 1
+                        },
+                        new Comment{CommentId = 2, Content = "Comment 2", PostId = 1 }
+                    }
 
             };
             posts.Add(p2);
 
             // add Post data to the mock object
-            mock.Setup(m => m.Posts).Returns(posts.AsQueryable());
+            mockPost.Setup(m => m.Posts).Returns(posts.AsQueryable());
+
+            // mock Comment data
+            comment = new Comment
+            {
+                    CommentId = 100,
+                Content = "I want your book",
+                    PostId = 1,
+            };
+            //mockComment.Setup(m => m.Comments).Returns(comments
+            //    .AsQueryable());
 
             // pass the mock to the controller
-            controller = new PostsController(mock.Object);
+            controller = new PostsController(mockPost.Object);
 
 
             //Set controller ControllerContext with fake context
@@ -113,9 +136,9 @@ namespace Group7A2.Tests.Controllers
         public void DetailsWithInvalidIdReturnNull()
         {
             //Arrange
-            int id = 40; 
+            int invalidId = 40; 
             // act
-            var actual = controller.Details(id) as ViewResult;
+            var actual = controller.Details(invalidId) as ViewResult;
 
             // assert
             Assert.IsNull(actual.Model);
@@ -143,6 +166,37 @@ namespace Group7A2.Tests.Controllers
         }
 
         [TestMethod]
+        public void CreateInvalidCommentRenturnNull()
+        {
+            // act
+            var actual = controller.CreateComment(posts[0].Comments[1]) as PartialViewResult;
+
+            // assert
+            Assert.AreEqual("Details", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void CreateValidCommentRenturnView()
+        {
+            // act
+            var actual = controller.CreateComment(comment) as PartialViewResult;
+
+            // assert
+            Assert.AreEqual("Details", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void CreateInvalidModelRenturnView()
+        {
+            // arrange
+            controller.ModelState.AddModelError("key", "some error here");
+            //Act
+            var actual = controller.CreateComment(comment) as PartialViewResult;
+            //Assert
+            Assert.AreEqual("Details", actual.ViewName);
+        }
+
+        [TestMethod]
         public void CreateLoadsView()
         {
             // act
@@ -151,6 +205,8 @@ namespace Group7A2.Tests.Controllers
             // assert
             Assert.AreEqual("Create", actual.ViewName);
         }
+
+
 
         // POST: Create
         [TestMethod]

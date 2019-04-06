@@ -44,13 +44,14 @@ namespace Group7A2.Controllers
             PostCommentViewModel postComment = new PostCommentViewModel();
             postComment.post = db.Posts.SingleOrDefault(c => c.PostId == id);
             //postComment.post.Comments = db.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
-            postComment.post.Comments = postComment.post.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
+            
             //Post post = db.Posts.SingleOrDefault(c => c.PostId == id);
             if (postComment.post == null)
             {
                 //return HttpNotFound();
                 return View("Error");
             }
+            postComment.post.Comments = postComment.post.Comments.OrderByDescending(p => p.PostTime.Date).ThenBy(p => p.PostTime.TimeOfDay).ToList();
             return View("Details",postComment);
         }
 

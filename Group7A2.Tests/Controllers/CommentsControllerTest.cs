@@ -65,39 +65,39 @@ namespace Group7A2.Tests.Controllers
             controller.ControllerContext = controllerContext.Object;
         }
 
-        [TestMethod]
-        public void CreateLoadsView()
-        {
-            // act
-            ViewResult actual = (ViewResult)controller.Create();
+        //[TestMethod]
+        //public void CreateLoadsView()
+        //{
+        //    // act
+        //    ViewResult actual = (ViewResult)controller.Create();
 
-            // assert
-            Assert.AreEqual("Create", actual.ViewName);
-        }
+        //    // assert
+        //    Assert.AreEqual("Create", actual.ViewName);
+        //}
 
-        // POST: Create
-        [TestMethod]
-        public void CreateSaveValidData()
-        {
-            // act 
-            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Create(comments[0]);
+        //// POST: Create
+        //[TestMethod]
+        //public void CreateSaveValidData()
+        //{
+        //    // act 
+        //    RedirectToRouteResult actual = (RedirectToRouteResult)controller.Create(comments[0]);
 
-            // assert
-            Assert.AreEqual("Details", actual.RouteValues["action"]);
-        }
+        //    // assert
+        //    Assert.AreEqual("Details", actual.RouteValues["action"]);
+        //}
 
-        [TestMethod]
-        public void CreateSaveInvalidLoadsEditView()
-        {
-            // arrange
-            controller.ModelState.AddModelError("key", "error data");
+        //[TestMethod]
+        //public void CreateSaveInvalidLoadsEditView()
+        //{
+        //    // arrange
+        //    controller.ModelState.AddModelError("key", "error data");
 
-            // act
-            ViewResult actual = (ViewResult)controller.Create(comments[0]);
+        //    // act
+        //    ViewResult actual = (ViewResult)controller.Create(comments[0]);
 
-            // assert
-            Assert.AreEqual("Create", actual.ViewName);
-        }
+        //    // assert
+        //    Assert.AreEqual("Create", actual.ViewName);
+        //}
 
         [TestMethod]
         public void DeleteWithValidId()
