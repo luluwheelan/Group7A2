@@ -17,6 +17,7 @@ namespace Group7A2.Models
     
         public Group7A2Context() : base("name=Group7A2Context")
         {
+            Database.CommandTimeout = 300;
         }
 
         public System.Data.Entity.DbSet<Group7A2.Models.Category> Categories { get; set; }
