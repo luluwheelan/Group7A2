@@ -14,7 +14,7 @@
     @foreach (var com in Model.Posts)
     {
         <div class="col-md-12  jumbotron-fluid mt-5 bg-light pl-3">
-            <h3>@Html.DisplayFor(modelItem => com.Subject)</h3> <p> Post By: @Html.DisplayFor(modelItem => com.Author) | @Html.DisplayFor(modelItem => com.PostTime) <button class="btn btn-link">@Html.ActionLink("Detail", "Details", "Posts", new { id = com.PostId }, null) >></button></p>
+            <h3>@Html.DisplayFor(modelItem => com.Subject)</h3> <p> Post By: @Html.DisplayFor(modelItem => com.Author) | @Html.DisplayFor(modelItem => com.PostTime) <button class="btn btn-link">@Html.ActionLink("Details", "Details", "Posts", new { id = com.PostId }, null) >></button></p>
             <p>
                 @if (User.IsInRole("Admin"))
                 {

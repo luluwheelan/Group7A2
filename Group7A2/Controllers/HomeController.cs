@@ -22,7 +22,7 @@ namespace Group7A2.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "If you have any questions or concerns, let us know!";
 
             return View();
         }
